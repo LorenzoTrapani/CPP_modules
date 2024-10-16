@@ -6,7 +6,7 @@
 /*   By: lotrapan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:52:08 by lotrapan          #+#    #+#             */
-/*   Updated: 2024/10/15 17:38:10 by lotrapan         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:46:36 by lotrapan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int main()
 	classic.setType("axe");
 	bob.attack();
 
+	steve.attack();
 	steve.setWeapon(weird);
 	steve.attack();
 	weird.setType("Dead puppy");
