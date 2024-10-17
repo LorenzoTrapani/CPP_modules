@@ -24,6 +24,10 @@ int main()
 	while (1) {
 		std::cout << "> ";
 		std::getline(std::cin, input);
+		if (std::cin.eof()) {
+			std::cout << std::endl;
+			break;
+		}
 		if (input == "ADD") {
 			std::cout << "Enter the first name: ";
 			std::getline(std::cin, input);
