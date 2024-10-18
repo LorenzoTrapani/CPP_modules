@@ -6,7 +6,7 @@
 /*   By: lotrapan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:25:30 by lotrapan          #+#    #+#             */
-/*   Updated: 2024/10/16 17:31:17 by lotrapan         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:30:58 by lotrapan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@ Fixed::Fixed()
 	value = 0;
 }
 
-Fixed::Fixed(const Fixed &other)
+Fixed::Fixed(const Fixed &str)
 {
-	*this = other;
+	*this = str;
 }
 
 Fixed::~Fixed()
 {
 }
 
-Fixed &Fixed::operator=(const Fixed &other)
+Fixed &Fixed::operator=(const Fixed &str)
 {
-	value = other.getRawBits();
+	value = str.getRawBits();
 	return (*this);
 }
 
@@ -68,54 +68,54 @@ std::ostream &operator<<(std::ostream &out, const Fixed &fixed)
 	return out;
 }
 
-bool Fixed::operator>(Fixed const &other) const
+bool Fixed::operator>(Fixed const &str) const
 {
-	return value > other.getRawBits();
+	return value > str.getRawBits();
 }
 
-bool Fixed::operator<(Fixed const &other) const
+bool Fixed::operator<(Fixed const &str) const
 {
-	return value < other.getRawBits();
+	return value < str.getRawBits();
 }
 
-bool Fixed::operator>=(Fixed const &other) const
+bool Fixed::operator>=(Fixed const &str) const
 {
-	return value >= other.getRawBits();
+	return value >= str.getRawBits();
 }
 
-bool Fixed::operator<=(Fixed const &other) const
+bool Fixed::operator<=(Fixed const &str) const
 {
-	return value <= other.getRawBits();
+	return value <= str.getRawBits();
 }
 
-bool Fixed::operator==(Fixed const &other) const
+bool Fixed::operator==(Fixed const &str) const
 {
-	return value == other.getRawBits();
+	return value == str.getRawBits();
 }
 
-bool Fixed::operator!=(Fixed const &other) const
+bool Fixed::operator!=(Fixed const &str) const
 {
-	return value != other.getRawBits();
+	return value != str.getRawBits();
 }
 
-Fixed Fixed::operator+(Fixed const &other) const
+Fixed Fixed::operator+(Fixed const &str) const
 {
-	return Fixed(toFloat() + other.toFloat());
+	return Fixed(toFloat() + str.toFloat());
 }
 
-Fixed Fixed::operator-(Fixed const &other) const
+Fixed Fixed::operator-(Fixed const &str) const
 {
-	return Fixed(toFloat() - other.toFloat());
+	return Fixed(toFloat() - str.toFloat());
 }
 
-Fixed Fixed::operator*(Fixed const &other) const
+Fixed Fixed::operator*(Fixed const &str) const
 {
-	return Fixed(toFloat() * other.toFloat());
+	return Fixed(toFloat() * str.toFloat());
 }
 
-Fixed Fixed::operator/(Fixed const &other) const
+Fixed Fixed::operator/(Fixed const &str) const
 {
-	return Fixed(toFloat() / other.toFloat());
+	return Fixed(toFloat() / str.toFloat());
 }
 
 Fixed &Fixed::operator++()

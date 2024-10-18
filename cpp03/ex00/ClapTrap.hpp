@@ -1,41 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Fixed.hpp                                          :+:      :+:    :+:   */
+/*   ClapTrap.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lotrapan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 17:20:01 by lotrapan          #+#    #+#             */
-/*   Updated: 2024/10/17 15:42:17 by lotrapan         ###   ########.fr       */
+/*   Created: 2024/10/17 16:37:18 by lotrapan          #+#    #+#             */
+/*   Updated: 2024/10/17 16:46:49 by lotrapan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FIXED_HPP
-# define FIXED_HPP
+#ifndef CLAPTRAP_HPP
+# define CLAPTRAP_HPP
 
 #include <iostream>
-#include <cmath>
+#include <string>
 
-class Fixed
+class ClapTrap
 {
 	private:
-	int value;
-	static const int bits = 8;
+	std::string name;
+	int hitPoints = 10;
+	int energyPoints = 10;
+	int attackDamage = 0;
 
 	public:
-	Fixed();
-	Fixed(const Fixed &str);
-	~Fixed();
-	Fixed &operator=(const Fixed &str);
-	Fixed(const int value);
-	Fixed(const float value);
-
-	int getRawBits(void) const;
-	void setRawBits(int const raw);
-	float toFloat(void) const;
-	int toInt(void) const;
+	ClapTrap();
+	ClapTrap(std::string const &name);
+	ClapTrap(ClapTrap const &clapTrap);
+	ClapTrap &operator=(ClapTrap const &clapTrap);
+	~ClapTrap();
+	void attack(std::string const &target);
+	void takeDamage(unsigned int amount);
+	void beRepaired(unsigned int amount);
 };
-
-std::ostream &operator<<(std::ostream &out, const Fixed &fixed);
 
 #endif

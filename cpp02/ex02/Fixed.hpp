@@ -6,7 +6,7 @@
 /*   By: lotrapan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:25:39 by lotrapan          #+#    #+#             */
-/*   Updated: 2024/10/16 17:29:07 by lotrapan         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:29:04 by lotrapan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ class Fixed
 
 	public:
 	Fixed();
-	Fixed(const Fixed &other);
+	Fixed(const Fixed &str);
 	~Fixed();
-	Fixed &operator=(const Fixed &other);
+	Fixed &operator=(const Fixed &str);
 	Fixed(const int value);
 	Fixed(const float value);
 
@@ -34,16 +34,16 @@ class Fixed
 	void setRawBits(int const raw);
 	float toFloat(void) const;
 	int toInt(void) const;
-	bool operator>(Fixed const &other) const;
-	bool operator<(Fixed const &other) const;
-	bool operator>=(Fixed const &other) const;
-	bool operator<=(Fixed const &other) const;
-	bool operator==(Fixed const &other) const;
-	bool operator!=(Fixed const &other) const;
-	Fixed operator+(Fixed const &other) const;
-	Fixed operator-(Fixed const &other) const;
-	Fixed operator*(Fixed const &other) const;
-	Fixed operator/(Fixed const &other) const;
+	bool operator>(Fixed const &str) const;
+	bool operator<(Fixed const &str) const;
+	bool operator>=(Fixed const &str) const;
+	bool operator<=(Fixed const &str) const;
+	bool operator==(Fixed const &str) const;
+	bool operator!=(Fixed const &str) const;
+	Fixed operator+(Fixed const &str) const;
+	Fixed operator-(Fixed const &str) const;
+	Fixed operator*(Fixed const &str) const;
+	Fixed operator/(Fixed const &str) const;
 	Fixed &operator++();
 	Fixed operator++(int);
 	Fixed &operator--();
