@@ -1,7 +1,8 @@
 NAME = Fixed_2.0
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
-SRCS = *.cpp
+SRCS = main.cpp \
+		Fixed.cpp
 
 $(NAME): $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)

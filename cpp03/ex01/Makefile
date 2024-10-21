@@ -1,7 +1,9 @@
 NAME = ScavTrap
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
-SRCS = *.cpp
+SRCS = main.cpp \
+		ClapTrap.cpp \
+		ScavTrap.cpp
 
 $(NAME): $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
