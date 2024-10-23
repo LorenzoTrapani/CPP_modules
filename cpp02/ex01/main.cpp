@@ -6,7 +6,7 @@
 /*   By: lotrapan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:10:32 by lotrapan          #+#    #+#             */
-/*   Updated: 2024/10/16 17:17:42 by lotrapan         ###   ########.fr       */
+/*   Updated: 2024/10/22 15:39:57 by lotrapan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,10 @@ int main()
 	std::cout << "b is " << b.toInt() << " as integer" << std::endl;
 	std::cout << "c is " << c.toInt() << " as integer" << std::endl;
 	std::cout << "d is " << d.toInt() << " as integer" << std::endl;
+
+	a.setRawBits(42);
+
+	std::cout << a.getRawBits() << std::endl;
+	
 	return 0;
 }

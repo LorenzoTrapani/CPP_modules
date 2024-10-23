@@ -6,7 +6,7 @@
 /*   By: lotrapan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:19:26 by lotrapan          #+#    #+#             */
-/*   Updated: 2024/10/17 15:42:32 by lotrapan         ###   ########.fr       */
+/*   Updated: 2024/10/22 15:28:43 by lotrapan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ Fixed::Fixed(const float value)
 	this->value = (int)roundf(value * (1 << bits));
 }
 
-float Fixed::toFloat(void) const
-{
-	return (float)value / (1 << bits);
-}
-
 int Fixed::toInt(void) const
 {
 	return value >> bits;
+}
+
+float Fixed::toFloat(void) const
+{
+	return (float)value / (1 << bits);
 }
 
 std::ostream &operator<<(std::ostream &out, const Fixed &fixed)
