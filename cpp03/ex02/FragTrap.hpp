@@ -6,7 +6,7 @@
 /*   By: lotrapan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 16:58:47 by lotrapan          #+#    #+#             */
-/*   Updated: 2024/10/23 17:11:01 by lotrapan         ###   ########.fr       */
+/*   Updated: 2024/10/23 17:58:49 by lotrapan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class FragTrap : public ClapTrap
 	FragTrap(FragTrap const &copy);
 	FragTrap &operator=(FragTrap const &src);
 	~FragTrap();
+
 	void highFivesGuys(void);
 };
 
