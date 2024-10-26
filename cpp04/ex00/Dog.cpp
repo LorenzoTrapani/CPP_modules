@@ -2,7 +2,7 @@
 
 Dog::Dog() : Animal()
 {
-    this->type = "Dog";
+    this->_type = "Dog";
     std::cout << "Dog constructor called" << std::endl;
 }
 
@@ -16,10 +16,10 @@ Dog::~Dog()
     std::cout << "Dog destructor called" << std::endl;
 }
 
-Dog &Dog::operator=(const Dog &op)
+Dog &Dog::operator=(const Dog &src)
 {
-	if (this != &op) {
-		this->type = op.type;
+	if (this != &src) {
+		this->_type = src._type;
 		std::cout << "Dog assignation operator called" << std::endl;
 	}
 	return *this;
