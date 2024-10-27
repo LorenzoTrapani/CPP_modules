@@ -1,28 +1,16 @@
 #include "Cure.hpp"
 class Amateria;
 
-Cure::Cure() : AMateria("cure")
-{
-	std::cout << "Cure constructor called" << std::endl;
-}
+Cure::Cure() : AMateria("cure") {}
 
-Cure::Cure(const Cure &copy) : AMateria(copy)
-{
-	std::cout << "Cure copy constructor called" << std::endl;
-}
+Cure::Cure(const Cure &copy) : AMateria(copy) {}
 
-Cure::~Cure()
-{
-	std::cout << "Cure destructor called" << std::endl;
-}
+Cure::~Cure() {}
 
 Cure &Cure::operator=(const Cure &src)
 {
 	if (this != &src)
-	{
 		this->_type = src._type;
-		std::cout << "Cure assignation operator called" << std::endl;
-	}
 	return *this;
 }
 

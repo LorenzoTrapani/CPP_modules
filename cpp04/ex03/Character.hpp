@@ -10,7 +10,7 @@ class Character : public ICharacter
 private:
 	std::string _name;
 	AMateria *inventory[4];
-	std::vector<AMateria *> _trash;
+	AMateria *trash[100];
 
 public:
 	Character();
