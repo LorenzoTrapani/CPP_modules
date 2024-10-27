@@ -1,18 +1,18 @@
 #include "Character.hpp"
 
-Character::Character() : name("default")
+Character::Character() : _name("default")
 {
 	for (int i = 0; i < 4; i++)
 		this->inventory[i] = NULL;
 }
 
-Character::Character(std::string name) : name(name)
+Character::Character(std::string name) : _name(name)
 {
 	for (int i = 0; i < 4; i++)
 		this->inventory[i] = NULL;
 }
 
-Character::Character(const Character &copy) : name(copy.name)
+Character::Character(const Character &copy) : _name(copy._name)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -30,13 +30,14 @@ Character::~Character()
 		if (this->inventory[i])
 			delete this->inventory[i];
 	}
+	clearTrash();
 }
 
 Character &Character::operator=(const Character &src)
 {
 	if (this != &src)
 	{
-		this->name = src.name;
+		this->_name = src._name;
 		for (int i = 0; i < 4; i++)
 		{
 			if (this->inventory[i])
@@ -52,7 +53,7 @@ Character &Character::operator=(const Character &src)
 
 std::string const &Character::getName() const
 {
-	return this->name;
+	return this->_name;
 }
 
 void Character::equip(AMateria *m)
@@ -69,12 +70,23 @@ void Character::equip(AMateria *m)
 
 void Character::unequip(int idx)
 {
-	if (idx >= 0 && idx < 4)
+	if (idx >= 0 && idx < 4 && this->inventory[idx]) {
+		_trash.push_back(this->inventory[idx]);
 		this->inventory[idx] = NULL;
+	}
 }
 
 void Character::use(int idx, ICharacter &target)
 {
 	if (idx >= 0 && idx < 4 && this->inventory[idx])
 		this->inventory[idx]->use(target);
+}
+
+void Character::clearTrash()
+{
+	for (std::vector<AMateria *>::iterator it = _trash.begin(); it != _trash.end(); it++) {
+		delete *it;
+		*it = NULL;
+	}
+	_trash.clear();
 }
