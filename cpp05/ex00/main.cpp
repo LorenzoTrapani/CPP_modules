@@ -1,27 +1,40 @@
 #include "Bureaucrat.hpp"
 
-int main() {
+int main() 
+{
     try {
-        Bureaucrat b1("Alice", 0);  // Questo lancerà GradeTooHighException
-    } catch (const Bureaucrat::GradeTooHighException& e) {
-        std::cerr << "Eccezione catturata: " << e.what() << std::endl;
-    } catch (const Bureaucrat::GradeTooLowException& e) {
-        std::cerr << "Eccezione catturata: " << e.what() << std::endl;
-    }
-
-    try {
-        Bureaucrat b2("Bob", 200);  // Questo lancerà GradeTooLowException
-    } catch (const Bureaucrat::GradeTooHighException& e) {
-        std::cerr << "Eccezione catturata: " << e.what() << std::endl;
-    } catch (const Bureaucrat::GradeTooLowException& e) {
-        std::cerr << "Eccezione catturata: " << e.what() << std::endl;
-    }
-
-    try {
-        Bureaucrat b3("Charlie", 50);  // Questo è valido
-        std::cout << b3.getName() << " ha un grado di " << b3.getGrade() << std::endl;
+        Bureaucrat john("John", 50);
+        std::cout << john << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "Eccezione catturata: " << e.what() << std::endl;
+        std::cerr << "Exception caught: " << e.what() << std::endl;
+    }
+
+    try {
+        Bureaucrat steve("Steve", 0);
+		std::cout << steve << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Exception caught: " << e.what() << std::endl;
+    }
+
+    try {
+        Bureaucrat bob("Bob", 200);  
+    } catch (const std::exception& e) {
+        std::cerr << "Exception caught: " << e.what() << std::endl;
+    }
+
+	Bureaucrat pier("Pier", 150);
+	try {
+		std::cout << pier << std::endl;
+		pier.decrementGrade();
+	} catch (const std::exception& e) {
+        std::cerr << "Exception caught: " << e.what() << std::endl;
+    }
+
+	try {
+		pier.incrementGrade();
+		std::cout << pier << std::endl;
+	} catch (const std::exception& e) {
+        std::cerr << "Exception caught: " << e.what() << std::endl;
     }
 
     return 0;
