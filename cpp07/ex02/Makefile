@@ -2,7 +2,6 @@ NAME = Array
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 SRCS = main.cpp \
-		array.cpp \
 
 $(NAME): $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
