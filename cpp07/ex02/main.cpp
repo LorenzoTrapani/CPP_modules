@@ -1,53 +1,32 @@
 #include <iostream>
-#include <Array.hpp>
+#include <ctime>
+#include <cstdlib>
+#include "array.hpp"
 
-#define MAX_VAL 750
-int main(int, char**)
+int main(int argc, char** argv)
 {
+    if (argc != 2) {
+        std::cerr << "Usage: ./Array <MAX_VAL>" << std::endl;
+        return 1;
+    }
+
+    int MAX_VAL = std::atoi(argv[1]);
+    if (MAX_VAL <= 0) {
+        std::cerr << "Error: MAX_VAL must be a positive integer." << std::endl;
+        return 1;
+    }
+
     Array<int> numbers(MAX_VAL);
-    int* mirror = new int[MAX_VAL];
     srand(time(NULL));
-    for (int i = 0; i < MAX_VAL; i++)
-    {
-        const int value = rand();
-        numbers[i] = value;
-        mirror[i] = value;
-    }
-    //SCOPE
-    {
-        Array<int> tmp = numbers;
-        Array<int> test(tmp);
+    for (int i = 0; i < MAX_VAL; i++) {
+        numbers[i] = rand() % 100;
     }
 
-    for (int i = 0; i < MAX_VAL; i++)
-    {
-        if (mirror[i] != numbers[i])
-        {
-            std::cerr << "didn't save the same value!!" << std::endl;
-            return 1;
-        }
+    std::cout << "Generated Array:" << std::endl;
+    for (int i = 0; i < MAX_VAL; i++) {
+        std::cout << numbers[i] << " ";
     }
-    try
-    {
-        numbers[-2] = 0;
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    try
-    {
-        numbers[MAX_VAL] = 0;
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    std::cout << std::endl;
 
-    for (int i = 0; i < MAX_VAL; i++)
-    {
-        numbers[i] = rand();
-    }
-    delete [] mirror;//
     return 0;
 }
