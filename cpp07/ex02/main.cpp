@@ -1,32 +1,56 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include "array.hpp"
+#include "Array.hpp"
 
-int main(int argc, char** argv)
+int main() 
 {
-    if (argc != 2) {
-        std::cerr << "Usage: ./Array <MAX_VAL>" << std::endl;
-        return 1;
-    }
+    try {
+        std::cout << "Empty array test:" << std::endl;
+        Array<int> empty_arr;
+        std::cout << "Empty_arr size: " << empty_arr.size() << std::endl;
 
-    int MAX_VAL = std::atoi(argv[1]);
-    if (MAX_VAL <= 0) {
-        std::cerr << "Error: MAX_VAL must be a positive integer." << std::endl;
-        return 1;
-    }
+        std::cout << "\nArray with 5 elements test:" << std::endl;
+        Array<int> Original_arr(5);
+        std::cout << "Original_arr size: " << Original_arr.size() << std::endl;
+		for (unsigned int i = 0; i < Original_arr.size(); ++i) {
+            Original_arr[i] = i;
+        }
+        for (unsigned int i = 0; i < Original_arr.size(); ++i) {
+            std::cout << "Original_arr[" << i << "] = " << Original_arr[i] << std::endl;
+        }
 
-    Array<int> numbers(MAX_VAL);
-    srand(time(NULL));
-    for (int i = 0; i < MAX_VAL; i++) {
-        numbers[i] = rand() % 100;
-    }
+		std::cout << "\nCopy constructor test:" << std::endl;
+		Array<int> Copy_arr = Original_arr;
+        std::cout << "Copy_arr size: " << Copy_arr.size() << std::endl;
+		std::cout << "Before a change" << std::endl;
+		for (unsigned int i = 0; i < Copy_arr.size(); ++i) {
+            std::cout << "Copy_arr[" << i << "] = " << Copy_arr[i] << std::endl;
+        }
+		Original_arr[0] = 42;
+		std::cout << "After change" << std::endl;
+		std::cout << "Original:" << std::endl;
+		for (unsigned int i = 0; i < Original_arr.size(); ++i) {
+            std::cout << "Original_arr[" << i << "] = " << Original_arr[i] << std::endl;
+        }
+		std::cout << "Copy:" << std::endl;
+        for (unsigned int i = 0; i < Copy_arr.size(); ++i) {
+            std::cout << "Copy_arr[" << i << "] = " << Copy_arr[i] << std::endl;
+        }
 
-    std::cout << "Generated Array:" << std::endl;
-    for (int i = 0; i < MAX_VAL; i++) {
-        std::cout << numbers[i] << " ";
+		std::cout << "\nAssignment operator test:" << std::endl;
+        Array<int> Assign_arr(3);
+        Assign_arr = Original_arr;
+        std::cout << "Assign_arr size: " << Assign_arr.size() << std::endl;
+        for (unsigned int i = 0; i < Assign_arr.size(); ++i) {
+            std::cout << "Assign_arr[" << i << "] = " << Assign_arr[i] << std::endl;
+        }
+
+		std::cout << "\nOut of range test:" << std::endl;
+        std::cout << "Original_arr[10] = " << Original_arr[10] << std::endl;
+    } catch (const std::exception& e) {
+        std::cout << "Caught exception: " << e.what() << std::endl;
     }
-    std::cout << std::endl;
 
     return 0;
 }
