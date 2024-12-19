@@ -1,22 +1,32 @@
-#include "Span.hpp"
+#include "MutantStack.hpp"
 
 int main()
 {
-    Span sp = Span(5);
-    sp.addNumber(6);
-    sp.addNumber(3);
-    sp.addNumber(17);
-    sp.addNumber(9);
-    sp.addNumber(11);
-    std::cout << sp.shortestSpan() << std::endl;
-    std::cout << sp.longestSpan() << std::endl;
+	MutantStack<int> mstack;
+	// std::stack<int> stack;
 
-    Span sp2 = Span(10000);
-    std::vector<int> v(10000, 0);
-    for (int i = 0; i < 10000; i++)
-        v[i] = i;
-    sp2.addNumbers(v.begin(), v.end());
-    std::cout << sp2.shortestSpan() << std::endl;
-    std::cout << sp2.longestSpan() << std::endl;
-    return 0;
+	std::cout << "Testing MutantStack" << std::endl;
+	mstack.push(5);
+	mstack.push(17);
+	std::cout << "Element on top of the stack: " <<mstack.top() << std::endl;
+	mstack.pop();
+	std::cout << "Stack size:" <<mstack.size() << std::endl;
+	mstack.push(3);
+	mstack.push(5);
+	mstack.push(737);
+	//[...]
+	mstack.push(0);
+
+	std::cout << "\nTesting iterators" << std::endl;
+	MutantStack<int>::iterator it = mstack.begin();
+	MutantStack<int>::iterator ite = mstack.end();
+	++it;
+	--it;
+	while (it != ite)
+	{
+		std::cout << *it << std::endl;
+		++it;
+	}
+	std::stack<int> s(mstack);
+	return 0;
 }
