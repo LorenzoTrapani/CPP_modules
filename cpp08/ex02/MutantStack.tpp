@@ -4,16 +4,16 @@ template <typename T>
 MutantStack<T>::MutantStack() : std::stack<int>() {}
 
 template <typename T>
-MutantStack<T>::MutantStack(const MutantStack &other) : std::stack<int>(other) {}
+MutantStack<T>::MutantStack(const MutantStack &copy) : std::stack<int>(copy) {}
 
 template <typename T>
 MutantStack<T>::~MutantStack() {}
 
 template <typename T>
-MutantStack<T> &MutantStack<T>::operator=(const MutantStack &other)
+MutantStack<T> &MutantStack<T>::operator=(const MutantStack &assign)
 {
-	if (this != &other)
-		std::stack<int>::operator=(other);
+	if (this != &assign)
+		std::stack<int>::operator=(assign);
 	return *this;
 }
 
