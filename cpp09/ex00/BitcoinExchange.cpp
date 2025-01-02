@@ -65,15 +65,23 @@ bool isValidDate(int y, int m, int d)
     return true;
 }
 
-bool isValid(std::string line)
+bool isValidFormat(std::string line)
 {
-	if(strstr(line.c_str(), ",") == NULL)
+	if (strstr(line.c_str(), "|") == NULL)
 	{
+		std::cerr << "Error: Bad input" << line << std::endl;
 		return false;
 	}
+	return true;
+}
+
+bool isValid(std::string line)
+{
+	if(!isValidFormat(line))
+		return false;
 	int m = atoi(line.c_str() + 5);
 	int d = atoi(line.c_str() + 8);
-	int y = atoi(line.c_str() + 0);
+	int y = atoi(line.c_str());
 	if (!isValidDate(y, m, d))
 		return false;
 	return true;
@@ -83,6 +91,8 @@ float getExchangeRate(std::string date)
 {
 	std::fstream db;
 	db.open("data.csv");
+	if (!db.is_open())
+		throw std::runtime_error("Unable to open file");
 	std::string line;
 	std::string save;
 	std::getline(db, line);
@@ -109,10 +119,10 @@ void printValue(std::string date, float num, std::string line)
 		return;
 	}
 	float exchangeRate = getExchangeRate(date);
-	long int value = num;
-	if (exchangeRate == -1 || isValidValue(value) == false)
+	long value = static_cast<long>(num);
+	if (exchangeRate == -1 || !isValidValue(value) == false)
 		return;
-	std::cout << date << "=>" << value << "=" << exchangeRate << std::endl;
+	std::cout << date << "=>" << value << "=" << exchangeRate * value << std::endl;
 }
 
 void handleInput(std::string filename)
@@ -127,8 +137,10 @@ void handleInput(std::string filename)
 	while (std::getline(file, line)) {
 		date = getDateValue(line);
 		value = atof(getValue(line).c_str());
-		data[date] = value;
-		printValue(date, data[date], line);
+		if (isValid(line)) {
+			data[date] = value;
+			printValue(date, data[date], line);
+		}
 	}
 	file.close();
 }
