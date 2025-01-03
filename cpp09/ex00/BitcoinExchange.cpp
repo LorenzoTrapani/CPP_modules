@@ -1,38 +1,41 @@
 #include "BitcoinExchange.hpp"
 
-std::string getDateValue(std::string line)
+int stringToInt(const std::string& str)
 {
-	std::string date;
-	for (int i = 0; line[i]; i++) {
-		if (line[i] != ' ')
-			date += line[i];
-		if (line[i] == ' ' && line[i + 1] == '|')
-			break;
-	}
-	return (date);
+    std::istringstream iss(str);
+    int value;
+    iss >> value;
+    return value;
 }
 
-std::string getValue(std::string line)
-{
-	std::string value;
-	unsigned long int pos = 0;
-	for (int i = 0; line[i]; i++) {
-		if (line[i] == ' ' && line[i + 1] == '|') {
-			pos = i + 2;
-			break;
-		}
-	}
-	while (pos < line.length())
-	{
-		value += line[pos];
-		pos++;
-	}
-	return (value);
+float stringToFloat(const std::string& str) {
+    std::istringstream iss(str);
+    float value;
+    iss >> value;
+    return value;
+}
+
+std::string getDateValue(const std::string& line) {
+    std::string date;
+    size_t pos = line.find(" | ");
+    if (pos != std::string::npos) {
+        date = line.substr(0, pos);
+    }
+    return date;
+}
+
+std::string getValue(const std::string& line) {
+    std::string value;
+    size_t pos = line.find(" | ");
+    if (pos != std::string::npos) {
+        value = line.substr(pos + 3);
+    }
+    return value;
 }
 
 bool isValidValue(int value)
 {
-	if (value == -2147483648 || value > 1000)
+	if (value > 1000)
     {
         std::cerr << "Error: too large number." << std::endl;
         return (false);
@@ -65,83 +68,93 @@ bool isValidDate(int y, int m, int d)
     return true;
 }
 
-bool isValidFormat(std::string line)
+bool isValidFormat(const std::string& line)
 {
-	if (strstr(line.c_str(), "|") == NULL)
-	{
-		std::cerr << "Error: Bad input" << line << std::endl;
-		return false;
-	}
-	return true;
+    if (line.find(" | ") == std::string::npos) {
+        std::cerr << "Error: Bad input -> " << line << std::endl;
+        return false;
+    }
+    return true;
 }
 
-bool isValid(std::string line)
+bool isValid(const std::string& line)
 {
-	if(!isValidFormat(line))
-		return false;
-	int m = atoi(line.c_str() + 5);
-	int d = atoi(line.c_str() + 8);
-	int y = atoi(line.c_str());
-	if (!isValidDate(y, m, d))
-		return false;
-	return true;
+    if (!isValidFormat(line)) {
+        return false;
+    }
+    std::string date = getDateValue(line);
+    if (date.length() != 10 || date[4] != '-' || date[7] != '-') {
+        std::cerr << "Error: Invalid date format -> " << date << std::endl;
+        return false;
+    }
+    int year = stringToInt(date.substr(0, 4));
+    int month = stringToInt(date.substr(5, 2));
+    int day = stringToInt(date.substr(8, 2));
+    return (isValidDate(year, month, day));
 }
 
-float getExchangeRate(std::string date)
+
+
+std::map<std::string, float> loadExchangeData(const std::string& filename)
 {
-	std::fstream db;
-	db.open("data.csv");
-	if (!db.is_open())
-		throw std::runtime_error("Unable to open file");
-	std::string line;
-	std::string save;
-	std::getline(db, line);
-	while (std::getline(db, line))
-	{
-		if (getDateValue(line) == date)
-		{
-			save = line;
-			break ;
-		}
-		else if (getDateValue(line) >= date)
-			break ;
-		save = line;
-	}
-	db.close();
-	return(atof(getValue(save).c_str()));
+    std::map<std::string, float> exchangeData;
+    std::ifstream file(filename.c_str());
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file: " << filename << std::endl;
+        return exchangeData;
+    }
+    std::string line;
+    std::getline(file, line);
+    while (std::getline(file, line)) {
+        std::string date = getDateValue(line);
+        std::string rateStr = getValue(line);
+        if (isValid(line)) {
+            float rate = stringToFloat(rateStr);
+            exchangeData[date] = rate;
+        }
+    }
+    file.close();
+    return exchangeData;
 }
 
-void printValue(std::string date, float num, std::string line)
-{
-	if (!isValid(line))
-	{
-		std::cerr << "Error: Bad input" << line << std::endl;
-		return;
-	}
-	float exchangeRate = getExchangeRate(date);
-	long value = static_cast<long>(num);
-	if (exchangeRate == -1 || !isValidValue(value) == false)
-		return;
-	std::cout << date << "=>" << value << "=" << exchangeRate * value << std::endl;
+float findClosestRate(const std::string& date, const std::map<std::string, float>& exchangeData) {
+    std::map<std::string, float>::const_iterator it = exchangeData.lower_bound(date);
+    if (it != exchangeData.end() && it->first == date) {
+        return it->second;
+    }
+    if (it != exchangeData.begin()) {
+        --it;
+    }
+    return it->second;
 }
 
-void handleInput(std::string filename)
-{
-	std::map<std::string, float> data;
-	std::ifstream file(filename.c_str());
-	if (!file.is_open())
-		throw std::runtime_error("Unable to open file");
-	std::string line;
-	std::string date;
-	float value;
-	while (std::getline(file, line)) {
-		date = getDateValue(line);
-		value = atof(getValue(line).c_str());
-		if (isValid(line)) {
-			data[date] = value;
-			printValue(date, data[date], line);
-		}
-	}
-	file.close();
+void printValue(const std::string& date, float num, const std::map<std::string, float>& exchangeData) {
+    float exchangeRate = findClosestRate(date, exchangeData);
+    if (exchangeRate < 0.0f) {
+        std::cerr << "Error: No valid exchange rate for the date -> " << date << std::endl;
+        return;
+    }
+    std::cout << date << " => " << num << " = " << exchangeRate * num << std::endl;
 }
+
+void handleInput(const std::string& filename, const std::map<std::string, float>& exchangeData) {
+    std::ifstream file(filename.c_str());
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file -> " << filename << std::endl;
+        return;
+    }
+    std::string line;
+    while (std::getline(file, line)) {
+        std::string date = getDateValue(line);
+        std::string valueStr = getValue(line);
+        float value = stringToFloat(valueStr);
+        if (valueStr.empty() || value <= 0.0f) {
+            std::cerr << "Error: Invalid value -> " << valueStr << std::endl;
+            continue;
+        }
+        printValue(date, value, exchangeData);
+    }
+    file.close();
+}
+
 	
