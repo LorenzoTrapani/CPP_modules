@@ -33,12 +33,12 @@ std::string getValue(const std::string& line, const std::string &type) {
 
 bool isValidValue(float value)
 {
-	if (value > 1000) {
-        std::cerr << "Error: too large number." << std::endl;
+	if (value > 1000.0f) {
+        std::cerr << "Error: too large number: " << value << std::endl;
         return (false);
     }
-    if (value < 0) {
-        std::cerr << "Error: not a positive number." << std::endl;
+    if (value < 0.0f) {
+        std::cerr << "Error: not a positive number: " << value << std::endl;
         return (false);
     }
     return (true);
@@ -46,28 +46,20 @@ bool isValidValue(float value)
 
 bool isValidDate(int y, int m, int d)
 {
-	if (y < 2009 || y > 2022) {
-        std::cerr << "Error: Year out of range -> " << y << std::endl;
+    if (m < 1 || m > 12) 
         return false;
-    }
-    if (m < 1 || m > 12) {
-        std::cerr << "Error: Invalid month -> " << m << std::endl;
-        return false;
-    }
     int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     if ((y % 4 == 0 && y % 100 != 0) || (y % 400 == 0))
         daysInMonth[1] = 29;
-    if (d < 1 || d > daysInMonth[m - 1]) {
-        std::cerr << "Error: Invalid day -> " << d << std::endl;
+    if (d < 1 || d > daysInMonth[m - 1])
         return false;
-    }
     return true;
 }
 
 bool isValidFormat(const std::string& line, const std::string &type)
 {
 	if (line.find(type) == std::string::npos) {
-		std::cerr << "Error: Bad input -> " << line << std::endl;
+		std::cerr << "Error: Bad format input -> " << line << std::endl;
 		return false;
 	}
     return true;
@@ -75,17 +67,16 @@ bool isValidFormat(const std::string& line, const std::string &type)
 
 bool isValid(const std::string& line, const std::string &date, const std::string &type)
 {
-    if (!isValidFormat(line, type)) {
+    if (!isValidFormat(line, type))
         return false;
-    }
-    /* if (date.length() != 10 || date[4] != '-' || date[7] != '-') {
-        std::cerr << "Error: Invalid date format -> " << date << std::endl;
-        return false;
-    } */
     int year = stringToInt(date.substr(0, 4));
     int month = stringToInt(date.substr(5, 2));
     int day = stringToInt(date.substr(8, 2));
-    return (isValidDate(year, month, day));
+	if (!isValidDate(year, month, day)) {
+		std::cerr << "Error: Invalid date -> " << date << std::endl;
+		return false;
+	}
+    return true;
 }
 
 std::map<std::string, float> loadExchangeData(const std::string& filename)
@@ -127,7 +118,7 @@ void printValue(const std::string& date, float num, const std::map<std::string, 
         std::cerr << "Error: No valid exchange rate for the date -> " << date << std::endl;
         return;
     }
-    std::cout << date << " => " << num << " = " << exchangeRate * num << std::endl;
+    std::cout << date << "[" << exchangeRate << "]" << " => " << num << " = " << exchangeRate * num << std::endl;
 }
 
 void handleInput(const std::string& filename, const std::map<std::string, float>& exchangeData) {
@@ -138,14 +129,14 @@ void handleInput(const std::string& filename, const std::map<std::string, float>
     }
     std::string line;
 	std::getline(file, line);
+	int i = 2;
     while (std::getline(file, line)) {
         std::string date = getDateValue(line, " | ");
         std::string valueStr = getValue(line, " | ");
         float value = stringToFloat(valueStr);
-        if (!isValid(line, date, " | ")/*  && isValidValue(value) */) {
-            std::cerr << "Error: Invalid value -> " << valueStr << std::endl;
+		std::cout << "[" << i++ << "]" << "\t";
+        if (!isValid(line, date, " | ") || !isValidValue(value)) 
             continue;
-        }
         printValue(date, value, exchangeData);
     }
     file.close();
