@@ -59,7 +59,7 @@ bool isValidDate(int y, int m, int d)
 bool isValidFormat(const std::string& line, const std::string &type)
 {
 	if (line.find(type) == std::string::npos) {
-		std::cerr << "Error: Bad format input -> " << line << std::endl;
+		std::cerr << "Error: Bad format input => " << line << std::endl;
 		return false;
 	}
     return true;
