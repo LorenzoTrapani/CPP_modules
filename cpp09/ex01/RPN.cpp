@@ -31,7 +31,7 @@ void RPN::handleInput(std::string const &str) {
     while (iss >> token) {
         if (token.length() == 1 && ops.find(token[0]) != std::string::npos)
             calculate(token[0]);
-        else if(token.length() ==1 && !isdigit(token[0]))
+        else if(token.length() ==1 && isdigit(token[0]))
             _stack.push(stringToInt(token));
         else
             throw std::runtime_error("Error: Invalid token");
