@@ -24,13 +24,13 @@ void Span::addNumber(int n)
     if (_numbers.size() < _size)
         _numbers.push_back(n);
     else
-        throw std::out_of_range("Span is full");
+        throw std::out_of_range("Error: Span is full");
 }
 
 int Span::shortestSpan()
 {
     if (_numbers.size() < 2)
-        throw std::out_of_range("Not enough numbers");
+        throw std::out_of_range("Error: Not enough numbers");
     std::vector<int> sorted = _numbers;
     std::sort(sorted.begin(), sorted.end());
     int min = sorted[1] - sorted[0];
@@ -44,7 +44,7 @@ int Span::shortestSpan()
 int Span::longestSpan()
 {
     if (_numbers.size() < 2)
-        throw std::out_of_range("Not enough numbers");
+        throw std::out_of_range("Error: Not enough numbers");
     std::vector<int> sorted = _numbers;
     std::sort(sorted.begin(), sorted.end());
     return sorted[sorted.size() - 1] - sorted[0];
@@ -53,7 +53,7 @@ int Span::longestSpan()
 void Span::addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end)
 {
     if (_numbers.size() + std::distance(begin, end) > _size)
-        throw std::out_of_range("Span is full");
+        throw std::out_of_range("Error: Span is full");
     _numbers.insert(_numbers.end(), begin, end);
 }
 
