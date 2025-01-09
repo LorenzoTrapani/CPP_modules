@@ -1,18 +1,24 @@
 #include "BitcoinExchange.hpp"
 
-int stringToInt(const std::string& str)
+long stringToLong(const std::string& str)
 {
     std::istringstream iss(str);
-    int value;
-    iss >> value;
+    long value;
+	char *end;
+	value = strtol(str.c_str(), &end, 10);
+	if (*end != '\0')
+		throw std::runtime_error("Invalid value\t\t=> " + str);
     return value;
 }
 
 float stringToFloat(const std::string& str) {
     std::istringstream iss(str);
     float value;
-    iss >> value;
-    return value;
+    char *end;
+	value = strtof(str.c_str(), &end);
+	if (*end != '\0')
+		throw std::runtime_error("Invalid value\t\t=> " + str);
+	return value;
 }
 
 std::string getDateValue(const std::string& line, const std::string &type) {
@@ -31,14 +37,18 @@ std::string getValue(const std::string& line, const std::string &type) {
     return value;
 }
 
-bool isValidValue(float value)
-{
+bool isValidValue(float value) {
+	std::stringstream ss;
+	float val = value;
+	ss << val;
+	std::string str = ss.str();
+	
 	if (value > 1000.0f) {
-        std::cerr << "Error: too large number: " << value << std::endl;
+        throw std::runtime_error("Value too large\t\t=> " + str);
         return (false);
     }
     if (value < 0.0f) {
-        std::cerr << "Error: not a positive number: " << value << std::endl;
+        throw std::runtime_error("Value too small\t\t=> " + str);
         return (false);
     }
     return (true);
@@ -59,7 +69,7 @@ bool isValidDate(int y, int m, int d)
 bool isValidFormat(const std::string& line, const std::string &type)
 {
 	if (line.find(type) == std::string::npos) {
-		std::cerr << "Error: Bad format input => " << line << std::endl;
+		std::cerr << "Error: Bad format input\t=>\t" << line << std::endl;
 		return false;
 	}
     return true;
@@ -69,11 +79,11 @@ bool isValid(const std::string& line, const std::string &date, const std::string
 {
     if (!isValidFormat(line, type))
         return false;
-    int year = stringToInt(date.substr(0, 4));
-    int month = stringToInt(date.substr(5, 2));
-    int day = stringToInt(date.substr(8, 2));
-	if (!isValidDate(year, month, day)) {
-		std::cerr << "Error: Invalid date -> " << date << std::endl;
+    int year = stringToLong(date.substr(0, 4));
+    int month = stringToLong(date.substr(5, 2));
+    int day = stringToLong(date.substr(8, 2));
+	if ((year <= 0 || month <= 0 || day <= 0) || !isValidDate(year, month, day)) {
+		throw std::runtime_error("Invalid date\t\t=> " + date);
 		return false;
 	}
     return true;
@@ -84,7 +94,7 @@ std::map<std::string, float> loadExchangeData(const std::string& filename)
     std::map<std::string, float> exchangeData;
     std::ifstream file(filename.c_str());
     if (!file.is_open()) {
-        std::cerr << "Error: Unable to open file: " << filename << std::endl;
+        std::cerr << "Error: Unable to open file:\t" << filename << std::endl;
         return exchangeData;
     }
     std::string line;
@@ -115,16 +125,16 @@ float findClosestRate(const std::string& date, const std::map<std::string, float
 void printValue(const std::string& date, float num, const std::map<std::string, float>& exchangeData) {
     float exchangeRate = findClosestRate(date, exchangeData);
     if (exchangeRate < 0.0f) {
-        std::cerr << "Error: No valid exchange rate for the date -> " << date << std::endl;
+        std::cerr << "Error: No valid exchange rate for the date\t=>\t" << date << std::endl;
         return;
     }
-    std::cout << date << "[" << exchangeRate << "]" << " => " << num << " = " << exchangeRate * num << std::endl;
+    std::cout << date << "[" << exchangeRate << "]" << "\t=> " << num << " = " << exchangeRate * num << std::endl;
 }
 
 void handleInput(const std::string& filename, const std::map<std::string, float>& exchangeData) {
     std::ifstream file(filename.c_str());
     if (!file.is_open()) {
-        std::cerr << "Error: Unable to open file -> " << filename << std::endl;
+        std::cerr << "Error: Unable to open file\t=>\t" << filename << std::endl;
         return;
     }
     std::string line;
@@ -133,10 +143,17 @@ void handleInput(const std::string& filename, const std::map<std::string, float>
     while (std::getline(file, line)) {
         std::string date = getDateValue(line, " | ");
         std::string valueStr = getValue(line, " | ");
-        float value = stringToFloat(valueStr);
+		float value;
 		std::cout << "[" << i++ << "]" << "\t";
-        if (!isValid(line, date, " | ") || !isValidValue(value)) 
-            continue;
+		try {
+        	value = stringToFloat(valueStr);
+			if (!isValidValue(value) || !isValid(line, date, " | "))
+				continue;
+		} catch (std::exception& e) {
+			std::cerr << e.what() << std::endl;
+			continue;
+		}
+		
         printValue(date, value, exchangeData);
     }
     file.close();
