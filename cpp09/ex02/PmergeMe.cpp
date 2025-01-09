@@ -24,7 +24,7 @@ void PmergeMe::parseInput(int ac, char **av) {
         throw std::runtime_error("Not enough arguments");
     for (int i = 1; i < ac; i++) {
         std::string arg(av[i]);
-        if (!isPositive(arg))
+        if (!isNumericValid(arg))
             throw std::runtime_error("Invalid argument");
         vecInput.push_back(std::atoi(arg.c_str()));
     }
@@ -40,7 +40,7 @@ void PmergeMe::printAfter(void) {
     printSequence(this->vector);
 }
 
-bool PmergeMe::isPositive(const std::string &str) {
+bool PmergeMe::isNumericValid(const std::string &str) {
     for (size_t i = 0; i < str.size(); i++) {
         if (!std::isdigit(str[i]))
             return false;

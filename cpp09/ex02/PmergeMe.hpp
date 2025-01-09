@@ -27,8 +27,8 @@ private:
     void parseInput(int ac, char **av);
     void printBefore(void);
 	void printAfter(void);
-	static bool isPositive(const std::string &str);
-	static long getTimeMs(void);
+	bool isNumericValid(const std::string &str);
+	long getTimeMs(void);
 
 	template <typename T>
 	void printSequence(const T &data);
