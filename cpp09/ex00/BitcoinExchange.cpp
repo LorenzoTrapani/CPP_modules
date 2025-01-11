@@ -69,7 +69,7 @@ bool isValidDate(int y, int m, int d)
 bool isValidFormat(const std::string& line, const std::string &type)
 {
 	if (line.find(type) == std::string::npos) {
-		std::cerr << "Error: Bad format input\t=>\t" << line << std::endl;
+		std::cerr << "Error: Bad format input\t=> " << line << std::endl;
 		return false;
 	}
     return true;
@@ -128,7 +128,7 @@ void printValue(const std::string& date, float num, const std::map<std::string, 
         std::cerr << "Error: No valid exchange rate for the date\t=>\t" << date << std::endl;
         return;
     }
-    std::cout << date << "[" << exchangeRate << "]" << "\t=> " << num << " = " << exchangeRate * num << std::endl;
+    std::cout << date << "[" << exchangeRate << "]" << " \t=> " << num << " = " << exchangeRate * num << std::endl;
 }
 
 void handleInput(const std::string& filename, const std::map<std::string, float>& exchangeData) {
