@@ -153,7 +153,6 @@ void handleInput(const std::string& filename, const std::map<std::string, float>
 			std::cerr << e.what() << std::endl;
 			continue;
 		}
-		
         printValue(date, value, exchangeData);
     }
     file.close();

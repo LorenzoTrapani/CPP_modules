@@ -19,7 +19,10 @@ int stringToInt(const std::string& str)
 {
     std::istringstream iss(str);
     int value;
-    iss >> value;
+	char *end;
+	value = strtol(str.c_str(), &end, 10);
+	if (*end != '\0')
+		throw std::runtime_error("Invalid value\t\t=> " + str);
     return value;
 }
 
